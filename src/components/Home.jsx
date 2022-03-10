@@ -1,6 +1,8 @@
 import React from 'react';
 import { getCategories } from '../services/api';
 import Category from './Category';
+import { MdShoppingCart } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 class Home extends React.Component {
   constructor() {
@@ -23,6 +25,12 @@ class Home extends React.Component {
     const { categoriesList } = this.state;
     return (
       <div>
+        <Link
+          to="/car"
+          data-testid="shopping-cart-button"
+        >
+          <MdShoppingCart />
+        </Link>
         <p
           data-testid="home-initial-message"
         >
