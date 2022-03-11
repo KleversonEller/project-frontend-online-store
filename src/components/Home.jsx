@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import Category from './Category';
 import ProductCard from './ProductCard';
-import Products from './Products';
 
 class Home extends React.Component {
   constructor() {
@@ -12,14 +11,11 @@ class Home extends React.Component {
     this.state = {
       categoriesList: [],
       products: [],
-      isThereListRender: false,
       inputSearch: '',
       isThereSearchProdut: false,
-      id: '',
       name: '',
     };
     this.handleCategoryChange = this.handleCategoryChange.bind(this);
-    this.handleSearchButton = this.handleSearchButton.bind(this);
     this.catchInput = this.catchInput.bind(this);
   }
 
@@ -27,27 +23,11 @@ class Home extends React.Component {
     this.listCategories();
   }
 
-  async handleSearchButton() {
-    const { inputSearch } = this.state;
-    const busca = await getProductsFromCategoryAndQuery('', inputSearch);
-    const { results } = busca;
-    this.setState({ products: results });
-    if (results.length === 0) {
-      this.setState({ isThereSearchProdut: false });
-    } else {
-      this.setState({ isThereSearchProdut: true });
-    }
-  }
-
   async handleCategoryChange({ target }) {
-    const { results } = await getProductsFromCategoryAndQuery(target.id, target.value);
-    console.log(results);
+    const { results } = await getProductsFromCategoryAndQuery('', target.value);
     this.setState({ products: results,
-      isThereListRender: true,
-      id: target.id,
       name: target.value,
     });
-    console.log(target.id, target.value);
   }
 
   catchInput({ target }) {
@@ -62,8 +42,8 @@ class Home extends React.Component {
   }
 
   render() {
-    const { categoriesList, products,
-      isThereListRender, isThereSearchProdut, id, name } = this.state;
+    const { categoriesList, products, isThereSearchProdut,
+      name, inputSearch } = this.state;
     return (
       <div>
         <Link
@@ -77,10 +57,21 @@ class Home extends React.Component {
         >
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
-        <Products
-          catchInput={ this.catchInput }
-          handleSearchButton={ this.handleSearchButton }
+        <input
+          className="button"
+          data-testid="query-input"
+          type="text"
+          name="inputSearch"
+          onChange={ this.catchInput }
         />
+        <button
+          data-testid="query-button"
+          value={ inputSearch }
+          type="submit"
+          onClick={ this.handleCategoryChange }
+        >
+          Busca:
+        </button>
         <h3>Categorias:</h3>
         {categoriesList.map((category) => (
           <Category
@@ -89,19 +80,16 @@ class Home extends React.Component {
             handleCategoryChange={ this.handleCategoryChange }
           />
         ))}
-        { isThereListRender ? <ProductCard
+        <ProductCard
           products={ products }
-          id={ id }
           name={ name }
-        /> : '' }
+        />
         {isThereSearchProdut
-          ? (products.map((product) => (
-            <div key={ product.id } data-testid="product">
-              <img src={ product.thumbnail } alt={ product.title } />
-              <p>{product.title}</p>
-              <p>{`R$ ${product.price}`}</p>
-            </div>
-          ))) : <p>Nenhum produto foi encontrado</p>}
+          ? (
+            <ProductCard
+              products={ products }
+              name={ name }
+            />) : <p>Nenhum produto foi encontrado</p>}
       </div>
     );
   }

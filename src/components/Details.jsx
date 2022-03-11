@@ -13,7 +13,7 @@ class Details extends React.Component {
 
   async componentDidMount() {
     const { match } = this.props;
-    const { results } = await getProductsFromCategoryAndQuery(match.params.id,
+    const { results } = await getProductsFromCategoryAndQuery('',
       match.params.name);
     const item = results.find((itens) => itens.id === match.params.idP);
     this.setState({

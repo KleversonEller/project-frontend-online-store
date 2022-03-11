@@ -6,7 +6,7 @@ class ProductCard extends React.Component {
   render() {
     const list = this.props;
     const { products } = list;
-    const { id, name } = this.props;
+    const { name } = this.props;
     return (
       <div>
         { products.map((product) => (
@@ -17,7 +17,7 @@ class ProductCard extends React.Component {
             <br />
             <Link
               data-testid="product-detail-link"
-              to={ `/details/${id}/${name}/${product.id}` }
+              to={ `/details/${name}/${product.id}` }
             >
               Detalhes
             </Link>
@@ -30,7 +30,6 @@ class ProductCard extends React.Component {
 
 ProductCard.propTypes = {
   products: PropTypes.arrayOf(PropTypes.object).isRequired,
-  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
 };
 
