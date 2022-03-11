@@ -1,19 +1,30 @@
 import React from 'react';
-import { getCategories } from '../services/api';
-import Category from './Category';
 import { MdShoppingCart } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
+import Category from './Category';
+import ProductCard from './ProductCard';
 
 class Home extends React.Component {
   constructor() {
     super();
     this.state = {
       categoriesList: [],
+      products: [],
+      isThereListRender: false,
     };
+    this.handleCategoryChange = this.handleCategoryChange.bind(this);
   }
 
   componentDidMount() {
     this.listCategories();
+  }
+
+  async handleCategoryChange({ target }) {
+    const { results } = await getProductsFromCategoryAndQuery(target.id, target.value);
+    console.log(results);
+    this.setState({ products: results, isThereListRender: true });
+    // console.log(products);
   }
 
   async listCategories() {
@@ -22,7 +33,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const { categoriesList } = this.state;
+    const { categoriesList, products, isThereListRender } = this.state;
     return (
       <div>
         <Link
@@ -38,8 +49,13 @@ class Home extends React.Component {
         </p>
         <h4>Categorias:</h4>
         {categoriesList.map((category) => (
-          <Category key={ category.id } category={ category } />
+          <Category
+            key={ category.id }
+            category={ category }
+            handleCategoryChange={ this.handleCategoryChange }
+          />
         ))}
+        { isThereListRender ? <ProductCard products={ products } /> : '' }
       </div>
     );
   }
