@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class Category extends Component {
   render() {
-    const { category: { name } } = this.props;
+    const { handleCategoryChange, category: { name, id } } = this.props;
 
     return (
       <label htmlFor={ name }>
@@ -11,8 +11,9 @@ class Category extends Component {
           data-testid="category"
           type="radio"
           value={ name }
-          id={ name }
+          id={ id }
           name="category"
+          onChange={ handleCategoryChange }
         />
         { name }
       </label>
@@ -25,6 +26,7 @@ Category.propTypes = {
     name: PropTypes.string,
     id: PropTypes.string,
   }).isRequired,
+  handleCategoryChange: PropTypes.func.isRequired,
 };
 
 export default Category;
