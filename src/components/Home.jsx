@@ -13,6 +13,8 @@ class Home extends React.Component {
       categoriesList: [],
       products: [],
       isThereListRender: false,
+      id: '',
+      name: '',
       inputSearch: '',
       isThereSearchProdut: false,
     };
@@ -39,7 +41,12 @@ class Home extends React.Component {
 
   async handleCategoryChange({ target }) {
     const { results } = await getProductsFromCategoryAndQuery(target.id, target.value);
-    this.setState({ products: results, isThereListRender: true });
+    console.log(results);
+    this.setState({ products: results,
+      isThereListRender: true,
+      id: target.id,
+      name: target.value,
+    });
   }
 
   catchInput({ target }) {
@@ -54,8 +61,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const { categoriesList, products,
-      isThereListRender, isThereSearchProdut } = this.state;
+      isThereListRender, isThereSearchProdut, id, name } = this.state;
     return (
       <div>
         <Link
@@ -81,7 +87,10 @@ class Home extends React.Component {
             handleCategoryChange={ this.handleCategoryChange }
           />
         ))}
-        {isThereListRender ? <ProductCard products={ products } /> : ''}
+        {isThereListRender ? <ProductCard
+          products={ products }
+          id={ id }
+          name={ name } /> : ''}
         {isThereSearchProdut
           ? (products.map((product) => (
             <div key={ product.id } data-testid="product">
