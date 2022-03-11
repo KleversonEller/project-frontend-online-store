@@ -1,7 +1,6 @@
 import React from 'react';
 
 class Products extends React.Component {
-
   render() {
     const {
       handleSearchButton,
@@ -15,22 +14,23 @@ class Products extends React.Component {
           data-testid="query-input"
           type="text"
           name="inputSearch"
-          onChange={catchInput}
+          onChange={ catchInput }
         />
         <button
           data-testid="query-button"
           type="submit"
-          onClick={handleSearchButton}
+          onClick={ handleSearchButton }
         >
           Busca:
         </button>
-        {/* <div key={element}>
-           { produts.map((elemento) => (
-             )) }
-         </div> */}
       </div>
     );
   }
 }
+
+Products.propTypes = {
+  handleSearchButton: PropTypes.func.isRequired,
+  catchInput: PropTypes.func.isRequired,
+};
 
 export default Products;
