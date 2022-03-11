@@ -12,6 +12,8 @@ class Home extends React.Component {
       categoriesList: [],
       products: [],
       isThereListRender: false,
+      id: '',
+      name: '',
     };
     this.handleCategoryChange = this.handleCategoryChange.bind(this);
   }
@@ -23,8 +25,12 @@ class Home extends React.Component {
   async handleCategoryChange({ target }) {
     const { results } = await getProductsFromCategoryAndQuery(target.id, target.value);
     console.log(results);
-    this.setState({ products: results, isThereListRender: true });
-    // console.log(products);
+    this.setState({ products: results,
+      isThereListRender: true,
+      id: target.id,
+      name: target.value,
+    });
+    console.log(target.id, target.value);
   }
 
   async listCategories() {
@@ -33,7 +39,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const { categoriesList, products, isThereListRender } = this.state;
+    const { categoriesList, products, isThereListRender, id, name } = this.state;
     return (
       <div>
         <Link
@@ -55,7 +61,11 @@ class Home extends React.Component {
             handleCategoryChange={ this.handleCategoryChange }
           />
         ))}
-        { isThereListRender ? <ProductCard products={ products } /> : '' }
+        { isThereListRender ? <ProductCard
+          products={ products }
+          id={ id }
+          name={ name }
+        /> : '' }
       </div>
     );
   }
