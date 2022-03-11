@@ -73,7 +73,7 @@ class Home extends React.Component {
           catchInput={ this.catchInput }
           handleSearchButton={ this.handleSearchButton }
         />
-        <h4>Categorias:</h4>
+        <h3>Categorias:</h3>
         {categoriesList.map((category) => (
           <Category
             key={ category.id }
