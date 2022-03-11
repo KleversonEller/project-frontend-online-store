@@ -1,63 +1,51 @@
 import React from 'react';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 
-class Produts extends React.Component {
-  constructor(props) {
-    super(props);
+class Products extends React.Component {
+  constructor() {
+    super();
     this.state = {
-      query: '',
-      categoryId: '',
       produtos: [],
     };
+    this.handleSearchButton = this.handleSearchButton.bind(this);
   }
 
-  busckText = ({ target }) => {
-    const { name, value } = target;
-    this.setState(
-      {
-        [name]: value,
-      },
-    );
+  async handleSearchButton({ target }) {
+    const { busca } = await getProductsFromCategoryAndQuery(target.id, target.value);
+    this.setState({ produtos: busca });
   }
 
-   busckProduts = async (event) => {
-     event.preventDefault();
-     const { categoryId, query } = this.state;
-     const Produts = await getProductsFromCategoryAndQuery(categoryId);
-     const checkCategory = (() => {
-       let check = '';
-       if (check === categoryId) {
-         check = categoryId;
-       } else {
-         check = query;
-       }
-     }
-     );
-     return checkCategory;
-   }
+  async catchInput() {
+    const text = document.getElementsByClassName('button');
+    return text.value;
+  }
 
-   render() {
-     return (
-       <div>
-         <input
-           data-testid="query-input"
-           type="text"
-           onChange={ this.busckText }
-           name="query-input"
-         />
-         <button
-           data-testid="query-button"
-           type="submit"
-           onClick={ this.busckProduts }
-         >
-           Busca:
-         </button>
-         {/* <div key={element}>
+  render() {
+    return (
+      <div>
+        <input
+          className="button"
+          data-testid="query-input"
+          type="text"
+          name="query-input"
+        />
+        <button
+          data-testid="query-button"
+          type="submit"
+          onClick={ this.handleSearchButton }
+        >
+          Busca:
+        </button>
+        {/* <div key={element}>
            { produts.map((elemento) => (
              )) }
          </div> */}
-       </div>
-     );
-   }
+      </div>
+    );
+  }
 }
-export default Produts;
+
+// Products.propTypes {
+//   produtos.propTypes:
+// }
+export default Products;
