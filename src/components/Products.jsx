@@ -1,38 +1,26 @@
 import React from 'react';
-import { getProductsFromCategoryAndQuery } from '../services/api';
 
 class Products extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      produtos: [],
-    };
-    this.handleSearchButton = this.handleSearchButton.bind(this);
-  }
-
-  async handleSearchButton({ target }) {
-    const { busca } = await getProductsFromCategoryAndQuery(target.id, target.value);
-    this.setState({ produtos: busca });
-  }
-
-  async catchInput() {
-    const text = document.getElementsByClassName('button');
-    return text.value;
-  }
 
   render() {
+    const {
+      handleSearchButton,
+      catchInput,
+    } = this.props;
+
     return (
       <div>
         <input
           className="button"
           data-testid="query-input"
           type="text"
-          name="query-input"
+          name="inputSearch"
+          onChange={catchInput}
         />
         <button
           data-testid="query-button"
           type="submit"
-          onClick={ this.handleSearchButton }
+          onClick={handleSearchButton}
         >
           Busca:
         </button>
@@ -45,7 +33,4 @@ class Products extends React.Component {
   }
 }
 
-// Products.propTypes {
-//   produtos.propTypes:
-// }
 export default Products;
