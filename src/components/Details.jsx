@@ -26,7 +26,7 @@ class Details extends React.Component {
     return (
       <div>
         {loading
-          ? <span>Carregando...</span>
+          ? <p>Carregando...</p>
           : (
             <div>
               <img src={ produto.thumbnail } alt={ produto.title } />
