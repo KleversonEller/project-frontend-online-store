@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import Category from './Category';
 import ProductCard from './ProductCard';
+import Products from './Products';
 
 class Home extends React.Component {
   constructor() {
@@ -14,12 +15,28 @@ class Home extends React.Component {
       isThereListRender: false,
       id: '',
       name: '',
+      inputSearch: '',
+      isThereSearchProdut: false,
     };
     this.handleCategoryChange = this.handleCategoryChange.bind(this);
+    this.handleSearchButton = this.handleSearchButton.bind(this);
+    this.catchInput = this.catchInput.bind(this);
   }
 
   componentDidMount() {
     this.listCategories();
+  }
+
+  async handleSearchButton() {
+    const { inputSearch } = this.state;
+    const busca = await getProductsFromCategoryAndQuery('', inputSearch);
+    const { results } = busca;
+    this.setState({ products: results });
+    if (results.length === 0) {
+      this.setState({ isThereSearchProdut: false });
+    } else {
+      this.setState({ isThereSearchProdut: true });
+    }
   }
 
   async handleCategoryChange({ target }) {
@@ -30,7 +47,12 @@ class Home extends React.Component {
       id: target.id,
       name: target.value,
     });
-    console.log(target.id, target.value);
+  }
+
+  catchInput({ target }) {
+    this.setState({
+      inputSearch: target.value,
+    });
   }
 
   async listCategories() {
@@ -39,7 +61,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const { categoriesList, products, isThereListRender, id, name } = this.state;
+      isThereListRender, isThereSearchProdut, id, name } = this.state;
     return (
       <div>
         <Link
@@ -53,6 +75,10 @@ class Home extends React.Component {
         >
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
+        <Products
+          catchInput={ this.catchInput }
+          handleSearchButton={ this.handleSearchButton }
+        />
         <h4>Categorias:</h4>
         {categoriesList.map((category) => (
           <Category
@@ -61,13 +87,21 @@ class Home extends React.Component {
             handleCategoryChange={ this.handleCategoryChange }
           />
         ))}
-        { isThereListRender ? <ProductCard
+        {isThereListRender ? <ProductCard
           products={ products }
           id={ id }
-          name={ name }
-        /> : '' }
+          name={ name } /> : ''}
+        {isThereSearchProdut
+          ? (products.map((product) => (
+            <div key={ product.id } data-testid="product">
+              <img src={ product.thumbnail } alt={ product.title } />
+              <p>{product.title}</p>
+              <p>{`R$ ${product.price}`}</p>
+            </div>
+          ))) : <p>Nenhum produto foi encontrado</p>}
       </div>
     );
   }
 }
+
 export default Home;
