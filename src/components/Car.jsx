@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Car extends React.Component {
   constructor() {
@@ -10,18 +11,15 @@ class Car extends React.Component {
   }
 
   componentDidMount() {
-    const { produtos } = this.state;
-    return produtos
+    const { produtosList } = this.props;
+    return produtosList
       ? this.setState({
+        produtos: produtosList,
         valida: true,
       })
       : this.setState({
         valida: false,
       });
-    //   const { maths } = this.props;
-    //   this.setState({
-    //     produtos: maths.params.produtos,
-    //   });
   }
 
   render() {
@@ -35,5 +33,9 @@ class Car extends React.Component {
     );
   }
 }
+
+Car.propTypes = {
+  produtosList: PropTypes.objectOf(PropTypes.object),
+}.isRequired;
 
 export default Car;

@@ -9,8 +9,6 @@ class Routes extends React.Component {
       <Switch>
         <Route exact path="/" component={ Home } />
         <Route exact path="/car" component={ Car } />
-        {/* <Route exact path="/car/:produtos"
-        render={ (props) => <Car { ...props } /> } /> */}
       </Switch>
     );
   }
