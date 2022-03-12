@@ -12,7 +12,7 @@ class Routes extends React.Component {
         <Route exact path="/car" component={ Car } />
         <Route
           exact
-          path="/details/:id/:name/:idP"
+          path="/details/:name/:idP"
           render={ (props) => <Details { ...props } /> }
         />
       </Switch>

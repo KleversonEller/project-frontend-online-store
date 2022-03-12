@@ -3,10 +3,37 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 class ProductCard extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      listSave: [],
+    };
+    this.saveCar = this.saveCar.bind(this);
+  }
+
+  componentDidMount() {
+    const valueLocal = JSON.parse(localStorage.getItem('cartProduts'));
+    return valueLocal && this.setState({
+      listSave: valueLocal,
+    });
+  }
+
+  saveCar(event) {
+    const { products } = this.props;
+    const item = products.find((objeto) => objeto.id === event.target.name);
+    console.log(item);
+    this.setState((prev) => ({
+      listSave: [...prev.listSave, item],
+    }), () => {
+      const { listSave } = this.state;
+      localStorage.setItem('cartProduts', JSON.stringify(listSave));
+    });
+  }
+
   render() {
     const list = this.props;
     const { products } = list;
-    const { id, name } = this.props;
+    const { name } = this.props;
     return (
       <div>
         { products.map((product) => (
@@ -17,10 +44,19 @@ class ProductCard extends React.Component {
             <br />
             <Link
               data-testid="product-detail-link"
-              to={ `/details/${id}/${name}/${product.id}` }
+              to={ `/details/${name}/${product.id}` }
             >
               Detalhes
             </Link>
+            <br />
+            <button
+              data-testid="product-add-to-cart"
+              type="button"
+              name={ product.id }
+              onClick={ this.saveCar }
+            >
+              Adicionar ao carrinho
+            </button>
           </div>
         ))}
       </div>
@@ -30,7 +66,6 @@ class ProductCard extends React.Component {
 
 ProductCard.propTypes = {
   products: PropTypes.arrayOf(PropTypes.object).isRequired,
-  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
 };
 
