@@ -21,7 +21,6 @@ class ProductCard extends React.Component {
   saveCar(event) {
     const { products } = this.props;
     const item = products.find((objeto) => objeto.id === event.target.name);
-    console.log(item);
     this.setState((prev) => ({
       listSave: [...prev.listSave, item],
     }), () => {
