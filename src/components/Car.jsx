@@ -30,9 +30,13 @@ class Car extends React.Component {
           ? (
             produtos.map((product) => (
               <div key={ product.id } data-testid="product">
-                <p data-testid="shopping-cart-product-name">{ product.title }</p>
                 <p
-                  data-testid="shopping-cart-product-quantity"
+                  data-testid="shopping-cart-product-name"
+                >
+                  { product.title }
+                </p>
+                <p
+                  data-testid="shopping-cart-product-quantity "
                 >
                   1
                 </p>
