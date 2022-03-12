@@ -1,4 +1,6 @@
 import React from 'react';
+import { MdShoppingCart } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 
@@ -8,7 +10,9 @@ class Details extends React.Component {
     this.state = {
       produto: {},
       loading: false,
+      listSave: [],
     };
+    this.saveCar = this.saveCar.bind(this);
   }
 
   async componentDidMount() {
@@ -16,8 +20,19 @@ class Details extends React.Component {
     const { results } = await getProductsFromCategoryAndQuery('',
       match.params.name);
     const item = results.find((itens) => itens.id === match.params.idP);
-    this.setState({
+    const valueLocal = JSON.parse(localStorage.getItem('cartProduts'));
+    return valueLocal && this.setState({
+      listSave: valueLocal,
       produto: item,
+    });
+  }
+
+  saveCar() {
+    this.setState((prev) => ({
+      listSave: [...prev.listSave, prev.produto],
+    }), () => {
+      const { listSave } = this.state;
+      localStorage.setItem('cartProduts', JSON.stringify(listSave));
     });
   }
 
@@ -25,6 +40,12 @@ class Details extends React.Component {
     const { produto, loading } = this.state;
     return (
       <div>
+        <Link
+          to="/car"
+          data-testid="shopping-cart-button"
+        >
+          <MdShoppingCart />
+        </Link>
         {loading
           ? <p>Carregando...</p>
           : (
@@ -34,6 +55,14 @@ class Details extends React.Component {
               <p>
                 {`R$ ${produto.price}` }
               </p>
+              <button
+                data-testid="product-detail-add-to-cart"
+                type="button"
+                name={ produto.id }
+                onClick={ this.saveCar }
+              >
+                Adicionar ao carrinho
+              </button>
             </div>
           )}
       </div>
