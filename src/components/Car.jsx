@@ -11,10 +11,10 @@ class Car extends React.Component {
   }
 
   componentDidMount() {
-    const { produtosList } = this.props;
-    return produtosList
+    const saveList = JSON.parse(localStorage.getItem('cartProduts'));
+    return saveList
       ? this.setState({
-        produtos: produtosList,
+        produtos: saveList,
         valida: true,
       })
       : this.setState({
@@ -27,7 +27,17 @@ class Car extends React.Component {
     return (
       <div>
         {valida
-          ? produtos
+          ? (
+            produtos.map((product) => (
+              <div key={ product.id } data-testid="product">
+                <p data-testid="shopping-cart-product-name">{ product.title }</p>
+                <p
+                  data-testid="shopping-cart-product-quantity"
+                >
+                  1
+                </p>
+              </div>
+            )))
           : <p data-testid="shopping-cart-empty-message"> Seu carrinho está vazio</p>}
       </div>
     );
