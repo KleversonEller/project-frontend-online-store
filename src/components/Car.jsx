@@ -66,7 +66,7 @@ class Car extends React.Component {
                   name="subtrai"
                   value={ product.id }
                   onClick={ this.defineQuantity }
-                  data-testid="product-increase-quantity"
+                  data-testid="product-decrease-quantity"
                   type="button"
                 >
                   -
@@ -80,7 +80,7 @@ class Car extends React.Component {
                   name="soma"
                   value={ product.id }
                   onClick={ this.defineQuantity }
-                  data-testid="product-decrease-quantity"
+                  data-testid="product-increase-quantity"
                   type="button"
                 >
                   +
