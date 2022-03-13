@@ -21,17 +21,20 @@ class Details extends React.Component {
       match.params.name);
     const item = results.find((itens) => itens.id === match.params.idP);
     const valueLocal = JSON.parse(localStorage.getItem('cartProduts'));
-    return valueLocal && this.setState({
-      listSave: valueLocal,
+    this.setState({
       produto: item,
     });
+    this.saveCar();
+    return valueLocal;
   }
 
   saveCar() {
+    const { listSave } = this.state;
+    console.log(listSave);
     this.setState((prev) => ({
       listSave: [...prev.listSave, prev.produto],
     }), () => {
-      const { listSave } = this.state;
+      console.log(listSave);
       localStorage.setItem('cartProduts', JSON.stringify(listSave));
     });
   }
