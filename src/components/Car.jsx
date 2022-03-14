@@ -21,6 +21,7 @@ class Car extends React.Component {
         quantity: saveList.map((item) => ({
           id: item.id,
           quantidade: 1,
+          estoque: item.available_quantity,
         })),
       })
       : this.setState({
@@ -32,18 +33,22 @@ class Car extends React.Component {
     const { quantity } = this.state;
     const id = event.target.value;
     const pega = quantity.find((objeto) => objeto.id === id);
-    if (event.target.name === 'soma') {
+    if (event.target.name === 'soma' && pega.quantidade + 1 <= pega.estoque) {
       this.setState((prev) => ({
         quantity: prev.quantity
           .map((objeto) => (objeto.id === id
-            ? { id: objeto.id, quantidade: objeto.quantidade + 1 }
+            ? { id: objeto.id,
+              quantidade: objeto.quantidade + 1,
+              estoque: objeto.estoque }
             : objeto)),
       }));
     } else if (event.target.name === 'subtrai' && pega.quantidade > 1) {
       this.setState((prev) => ({
         quantity: prev.quantity
           .map((objeto) => (objeto.id === id
-            ? { id: objeto.id, quantidade: objeto.quantidade - 1 }
+            ? { id: objeto.id,
+              quantidade: objeto.quantidade - 1,
+              estoque: objeto.estoque }
             : objeto)),
       }));
     }
@@ -82,6 +87,9 @@ class Car extends React.Component {
                   onClick={ this.defineQuantity }
                   data-testid="product-increase-quantity"
                   type="button"
+                  disabled={ quantity
+                    .find((objeto) => objeto.id === product.id).quantidade
+                    === quantity.find((objeto) => objeto.id === product.id).estoque }
                 >
                   +
                 </button>
